@@ -1,24 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import Navbar from './components/navbar';
+import Home from './pages/home';
+import Register from './pages/register';
+import Appointments from './pages/appointments';
+import RegisterDoctor from './pages/register_doctor';
+import RegisterPatient from './pages/register_patient';
+
+export const Context = React.createContext(null);
 
 function App() {
+  const [ctx, set_ctx] = React.useState({user_data: null, user_role: null, status: 'uninitialized'});
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Context.Provider value={{ctx, set_ctx}}>
+        <Navbar/>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/register/doctor" element={<RegisterDoctor/>} />
+          <Route path="/register/patient" element={<RegisterPatient />} />
+          <Route path="/appointments" element={<Appointments />} />
+        </Routes>
+      </Context.Provider>
+    </BrowserRouter>
   );
 }
 
