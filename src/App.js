@@ -8,6 +8,8 @@ import Register from './pages/register';
 import Appointments from './pages/appointments';
 import RegisterDoctor from './pages/register_doctor';
 import RegisterPatient from './pages/register_patient';
+import Profile from './pages/profile';
+import NewAppointment from './pages/new_appointment';
 
 export const Context = React.createContext(null);
 
@@ -24,6 +26,8 @@ function App() {
           <Route path="/register/doctor" element={<RegisterDoctor/>} />
           <Route path="/register/patient" element={<RegisterPatient />} />
           <Route path="/appointments" element={<Appointments />} />
+          <Route path="/appointments/new" element={<NewAppointment />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Context.Provider>
     </BrowserRouter>
