@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, memo, useRef } from 'react';
 import { Context } from '../App';
 import { useNavigate } from "react-router-dom";
 
@@ -6,7 +6,8 @@ function loadAppointments(state, set_state) {
     var now = new Date().toJSON();
     console.log(`Loading next appointments for current user...`);
 
-    fetch(`/v1/appointments?status=Scheduled&limit=50&offset=0&from=${now}`, {
+    fetch(`https://localhost:7000/v1/appointments?status=Scheduled&limit=50&offset=0&from=${now}`, {
+        credentials: 'include',    
         method: "GET",
         mode: "cors",
         headers: {
@@ -37,7 +38,8 @@ function loadAppointments(state, set_state) {
 }
 
 async function loadAppointmentParticipants(doctor_id, patient_id) {
-    const r1 = await fetch(`/v1/doctors/${doctor_id}`, {
+    const r1 = await fetch(`https://localhost:7000/v1/doctors/${doctor_id}`, {
+        credentials: 'include', 
         method: "GET",
         mode: "cors",
         headers: {
@@ -45,7 +47,8 @@ async function loadAppointmentParticipants(doctor_id, patient_id) {
         },
     });
 
-    const r2 = await fetch(`/v1/patients/${patient_id}`, {
+    const r2 = await fetch(`https://localhost:7000/v1/patients/${patient_id}`, {
+        credentials: 'include', 
         method: "GET",
         mode: "cors",
         headers: {
@@ -70,7 +73,8 @@ async function loadAppointmentParticipants(doctor_id, patient_id) {
 } 
 
 async function updateAppointment(appointment) {    
-    const resp = await fetch(`/v1/appointments/${appointment.id}`, {
+    const resp = await fetch(`https://localhost:7000/v1/appointments/${appointment.id}`, {
+        credentials: 'include',
         method: "PUT",
         mode: "cors",
         headers: {
@@ -101,7 +105,8 @@ function Appointments() {
             loading: true, 
             error:false, 
             appointments: [], 
-            selected_appointment: {}
+            selected_appointment: {},
+            connected: false
         });
     const navigate = useNavigate();
 
@@ -140,6 +145,14 @@ function Appointments() {
                 alert(`Something went wrong: ${r.error.reason}`);
             }
         });
+    }
+
+    const handleJoin = (event) => {
+        console.log("Connecting to a room...");
+        
+        if(state.connected === false) {
+            set_state({...state, connected: true});
+        }
     }
 
     const handleSelectedAppUpdate = (event) => {
@@ -205,7 +218,7 @@ function Appointments() {
             {
                 Object.keys(state.selected_appointment).length !== 0 &&
                 <div>
-                    <button type="button" class="btn btn-primary">Join!</button>
+                    <button type="button" class="btn btn-primary" onClick={handleJoin}>Join!</button>
                     <button type="button" class="btn btn-danger" onClick={handleCancel}>Cancel</button>
                 </div>
             }
@@ -223,8 +236,30 @@ function Appointments() {
                     </form>
                 </div>
             }
+            {
+                state.connected && 
+                <div>
+                    <UseScript />
+                    <div id="video-grid"></div>
+                </div>
+            }
         </>
     );
 }
+
+const UseScript = () => {
+    useEffect(() => {
+      const script = document.createElement('script');
+  
+      script.src = '/script.js';
+      script.async = true;
+  
+      document.body.appendChild(script);
+  
+      return () => {
+        document.body.removeChild(script);
+      }
+    }, []);
+};
 
 export default Appointments;
