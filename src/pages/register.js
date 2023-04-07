@@ -22,8 +22,8 @@ function Register() {
     
     return (
         <div>
-            <button type="button" class="btn btn-primary" onClick={goToDoctorRegister}>Doctor</button>
-            <button type="button" class="btn btn-success" onClick={goToPatientRegister}>Patient</button>
+            <button type="button" className="btn btn-primary" onClick={goToDoctorRegister}>Doctor</button>
+            <button type="button" className="btn btn-success" onClick={goToPatientRegister}>Patient</button>
         </div>
     );
 }

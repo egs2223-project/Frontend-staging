@@ -32,7 +32,7 @@ function Home() {
             <div>
                 <h1>Doctalk</h1>
                 <p>Doctalk is an online consultation platform which aims to blah blah blah</p>
-                <button type="button" class="btn btn-primary" onClick={() => window.location.href = 'https://localhost:7000/v1/login'}>Login here</button>
+                <button type="button" className="btn btn-primary" onClick={() => window.location.href = 'https://localhost:7000/v1/login'}>Login here</button>
             </div>
         );
     }

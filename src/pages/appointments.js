@@ -113,16 +113,16 @@ function Appointments() {
     //
     const DoctorAppointment = (props) => {
         if(props.data.a.id === props.data.state.selected_appointment.id) {
-            return <li id={props.data.a.id} class="list-group-item active" onClick={handleSelect}>{props.data.a.specialty} appointment with {props.data.a.patient.name} - {props.data.a.datetime}</li>;
-        }
-        return <li id={props.data.a.id} class="list-group-item" onClick={handleSelect}>{props.data.a.specialty} appointment with {props.data.a.patient.name} - {props.data.a.datetime}</li>;
+            return <li id={props.data.a.id} className="list-group-item active" onClick={handleSelect}>{props.data.a.specialty} appointment with {props.data.a.patient.name} - {props.data.a.datetime}</li>;
+        } 
+        return <li id={props.data.a.id} className="list-group-item" onClick={handleSelect}>{props.data.a.specialty} appointment with {props.data.a.patient.name} - {props.data.a.datetime}</li>;
     }
 
     const PatientAppointment = (props) => {
         if(props.data.a.id === props.data.state.selected_appointment.id) {
-            return <li id={props.data.a.id} class="list-group-item active" onClick={handleSelect}>{props.data.a.specialty} appointment with {props.data.a.doctor.name} - {props.data.a.datetime}</li>;
+            return <li id={props.data.a.id} className="list-group-item active" onClick={handleSelect}>{props.data.a.specialty} appointment with {props.data.a.doctor.name} - {props.data.a.datetime}</li>;
         }
-        return <li id={props.data.a.id} class="list-group-item" onClick={handleSelect}>{props.data.a.specialty} appointment with {props.data.a.doctor.name} - {props.data.a.datetime}</li>;
+        return <li id={props.data.a.id} className="list-group-item" onClick={handleSelect}>{props.data.a.specialty} appointment with {props.data.a.doctor.name} - {props.data.a.datetime}</li>;
     }
     
     const handleSelect = (event) => {
@@ -231,20 +231,20 @@ function Appointments() {
     return (
         <>
             <h1>Your next appointments:</h1>
-            <ul class="list-group">
+            <ul className="list-group">
                 {state.appointments.map((app) => 
-                    ctx.user_role === "Patient" ? <PatientAppointment data={{a: app, state: state}} /> : <DoctorAppointment data={{a: app, state: state}} />
+                    ctx.user_role === "Patient" ? <PatientAppointment key={app.id} data={{a: app, state: state}} /> : <DoctorAppointment key={app.id} data={{a: app, state: state}} />
                 )}
             </ul>
             {
                 ctx.user_role === "Patient" && 
-                <button type="button" class="btn btn-primary" onClick={() => navigate("/appointments/new")}>New Appointment</button>
+                <button type="button" className="btn btn-primary" onClick={() => navigate("/appointments/new")}>New Appointment</button>
             }
             {
                 Object.keys(state.selected_appointment).length !== 0 && !state.connected &&
                 <div>
-                    <button type="button" class="btn btn-primary" onClick={handleJoin}>Join!</button>
-                    <button type="button" class="btn btn-danger" onClick={handleCancel}>Cancel</button>
+                    <button type="button" className="btn btn-primary" onClick={handleJoin}>Join!</button>
+                    <button type="button" className="btn btn-danger" onClick={handleCancel}>Cancel</button>
                 </div>
             }
             {
@@ -252,12 +252,12 @@ function Appointments() {
                 <div>
                     <h3>Current Appointment:</h3>
                     <form onSubmit={handleSelectedAppUpdate}>
-                        <div class="mb-3">
-                            <label for="summary" class="form-label">Summary</label>
-                            <input type="text" class="form-control" id="summary"
+                        <div className="mb-3">
+                            <label htmlFor="summary" className="form-label">Summary</label>
+                            <input type="text" className="form-control" id="summary"
                                 name="summary" value={state.selected_appointment.summary} onChange={handleSelectedAppInputChange}></input>
                         </div>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" className="btn btn-primary">Update</button>
                     </form>
                 </div>
             }
@@ -266,7 +266,7 @@ function Appointments() {
                 <div>
                     <UseScript />
                     <div id="video-grid"></div>
-                    <button type="button" class="btn btn-danger" onClick={handleDisconnect}>Leave Call</button>
+                    <button type="button" className="btn btn-danger" onClick={handleDisconnect}>Leave Call</button>
                 </div>
             }
         </>
