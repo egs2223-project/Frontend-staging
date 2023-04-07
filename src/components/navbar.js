@@ -27,7 +27,7 @@ const Navbar = () => {
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a style={{cursor: 'pointer'}} class="nav-link active" aria-current="page" onClick={() => goHome()}>Home</a>
-                <a style={{cursor: 'pointer'}} class="nav-link" onClick={() => goProfile()}>Profile</a>
+                <a style={{cursor: 'pointer'}} class="nav-link active" onClick={() => goProfile()}>Profile</a>
             </div>
             </div>
         </div>
