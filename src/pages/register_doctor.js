@@ -20,6 +20,12 @@ function RegisterDoctor() {
     });
     const navigate = useNavigate();
 
+    React.useEffect(() => {
+        if (ctx.status !== "authenticated") {
+            navigate("/");
+        }
+    }, [ctx.status, navigate]);
+
     const handleInputChange = (event) => {
         console.log(event);
         const target = event.target;
@@ -67,13 +73,13 @@ function RegisterDoctor() {
             body: JSON.stringify(requestBodyDoctor)
         }).then(response => {
             console.log(response.status);
-            if (response.status == 201) {
+            if (response.status === 201) {
                 set_ctx({...ctx, status: "registered"});
                 navigate("/");
             }
-            else if (response.status == 403) {
+            else if (response.status === 403) {
                 alert("You need to use the same email you used to loggin externally");
-            } else if (response.status == 409) {
+            } else if (response.status === 409) {
                 alert("This email is already registered");
             } else {
                 alert(`This was an unexpected problem. You should debug this.`);

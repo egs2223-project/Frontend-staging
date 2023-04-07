@@ -3,6 +3,7 @@ import { Context } from '../App';
 import { useNavigate } from "react-router-dom";
 
 function Register() {
+    const { ctx, set_ctx } = React.useContext(Context);
     const navigate = useNavigate();
     
     const goToDoctorRegister = () => {
@@ -12,6 +13,12 @@ function Register() {
     const goToPatientRegister = () => {
         navigate("/register/patient");
     }
+
+    React.useEffect(() => {
+        if (ctx.status !== "authenticated") {
+            navigate("/");
+        }
+    }, [ctx.status, navigate]);
     
     return (
         <div>

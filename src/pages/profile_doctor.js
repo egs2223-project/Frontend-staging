@@ -76,7 +76,7 @@ function ProfileDoctor() {
         if (ctx.status !== "authenticated") {
             navigate("/");
         }
-    }, []);
+    }, [ctx.status, navigate]);
 
     if(ctx.status !== "authenticated") {
         return "...";

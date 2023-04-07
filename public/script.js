@@ -1,8 +1,7 @@
-const ROOM_ID = "1ad91f91-84ba-4f04-a56e-5a07a0e78788";
 const socket = io('http://localhost:3300')
 const videoGrid = document.getElementById('video-grid')
 const myPeer = new Peer(undefined, {
-  host: '/',
+  host: 'localhost',
   port: '3001'
 })
 

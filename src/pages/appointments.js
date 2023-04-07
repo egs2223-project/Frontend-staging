@@ -1,4 +1,4 @@
-import React, { useEffect, memo, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Context } from '../App';
 import { useNavigate } from "react-router-dom";
 
@@ -15,7 +15,7 @@ function loadAppointments(state, set_state) {
         },
     })
     .then(response => {
-        if (response.status == 200) {
+        if (response.status === 200) {
             response.json().then(a => {
                 let promises = [];
                 for(let p of a) {
@@ -155,6 +155,15 @@ function Appointments() {
         }
     }
 
+    const handleDisconnect = (event) => {
+        console.log("Disconnecting...");
+
+        if(state.connected === true) {
+            set_state({...state, connected: false});
+            window.location.href = "http://localhost:3000";
+        }
+    }
+
     const handleSelectedAppUpdate = (event) => {
         event.preventDefault();
         console.log("updating: " + event.target.id);
@@ -177,13 +186,34 @@ function Appointments() {
         appointment[name] = value;
         set_state({...state, selected_appointment: appointment});
     }
+
+    const UseScript = () => {
+        useEffect(() => {
+            const roomIdScript = document.createElement('script');
+            const roomId = state.selected_appointment.session_url.substring(27);
+            roomIdScript.text = `const ROOM_ID = "${roomId}"`
+            roomIdScript.async = false;
+            
+            const script = document.createElement('script');
+            script.src = '/script.js';
+            script.async = false;
+
+            document.body.appendChild(roomIdScript);
+            document.body.appendChild(script);
+
+            return () => {
+                document.body.removeChild(roomIdScript);
+                document.body.removeChild(script);
+            }
+        }, []);
+    };
     //
 
     React.useEffect(() => {
         if (ctx.status !== "authenticated") {
             navigate("/");
         }
-    }, []);
+    }, [ctx.status, navigate]);
 
     if(ctx.status !== "authenticated") {
         return "...";
@@ -196,11 +226,6 @@ function Appointments() {
     if(state.loading === true) {
         loadAppointments(state, set_state);
         return (<h1>Loading your appointments...</h1>);
-    }
-    
-    let new_button = undefined;
-    if(ctx.user_role === "Patient") {
-        new_button = <button type="button" class="btn btn-primary" onClick={() => navigate("/appointments/new")}>New Appointment</button>
     }
 
     return (
@@ -216,7 +241,7 @@ function Appointments() {
                 <button type="button" class="btn btn-primary" onClick={() => navigate("/appointments/new")}>New Appointment</button>
             }
             {
-                Object.keys(state.selected_appointment).length !== 0 &&
+                Object.keys(state.selected_appointment).length !== 0 && !state.connected &&
                 <div>
                     <button type="button" class="btn btn-primary" onClick={handleJoin}>Join!</button>
                     <button type="button" class="btn btn-danger" onClick={handleCancel}>Cancel</button>
@@ -241,25 +266,11 @@ function Appointments() {
                 <div>
                     <UseScript />
                     <div id="video-grid"></div>
+                    <button type="button" class="btn btn-danger" onClick={handleDisconnect}>Leave Call</button>
                 </div>
             }
         </>
     );
 }
-
-const UseScript = () => {
-    useEffect(() => {
-      const script = document.createElement('script');
-  
-      script.src = '/script.js';
-      script.async = true;
-  
-      document.body.appendChild(script);
-  
-      return () => {
-        document.body.removeChild(script);
-      }
-    }, []);
-};
 
 export default Appointments;

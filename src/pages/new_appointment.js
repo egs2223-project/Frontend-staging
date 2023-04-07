@@ -17,7 +17,7 @@ function LoadDoctors(state, set_state) {
         },
     })
         .then(response => {
-            if (response.status == 200) {
+            if (response.status === 200) {
                 response.json().then(d => {
                     set_state({ ...state, loading_doctors: false, error: false, doctors: d });
                 });
@@ -45,7 +45,7 @@ function LoadDoctorAppointments(state, set_state) {
         },
     })
         .then(response => {
-            if (response.status == 200) {
+            if (response.status === 200) {
                 response.json().then(a => {
                     set_state({ ...state, selected_doctor_apps: a, loading_selected_doctor_apps: false });
                 });
@@ -69,15 +69,15 @@ function PostAppointment(appointmentBody, navigate) {
         body: JSON.stringify(appointmentBody)
     }).then(response => {
         console.log(response.status);
-        if (response.status == 201) {
+        if (response.status === 201) {
             alert("Success!");
             navigate("/appointments");
         }
-        else if (response.status == 403) {
+        else if (response.status === 403) {
             alert("Forbidden");
-        } else if (response.status == 404) {
+        } else if (response.status === 404) {
             alert("Doctor not found");
-        } else if (response.status == 409) {
+        } else if (response.status === 409) {
             alert("The new appointment conflicts with an existing one");
         } else {
             alert(`There was an unexpected problem. You should debug this.`);
@@ -120,7 +120,7 @@ function NewAppointment() {
         if (ctx.status !== "authenticated") {
             navigate("/");
         }
-    }, []);
+    }, [ctx.status, navigate]);
 
     if (ctx.status !== "authenticated") {
         return "...";
