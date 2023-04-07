@@ -17,9 +17,14 @@ function Home() {
         loadUser(ctx, set_ctx);
     }
 
+    React.useEffect(() => {
+        if (ctx.status === "unregistered") {
+            navigate('/register');
+        }
+    }, [ctx.status, navigate]);
+
     if (ctx.status === "unregistered") {
-        navigate('/register');
-        return;
+        return "...";
     }
 
     if (ctx.status === "unauthorized") {
@@ -54,14 +59,14 @@ function loadUser(ctx, set_ctx) {
         },
     })
     .then(response => {
-        if (response.status == 200) {
+        if (response.status === 200) {
             response.json().then
             (responseJson => {
                 set_ctx({user_data: responseJson["user_data"], user_role: responseJson["user_type"], status: "authenticated"});
             });
-        } else if (response.status == 404) {
+        } else if (response.status === 404) {
             set_ctx({...ctx, status: "unregistered"});     
-        } else if (response.status == 401) {
+        } else if (response.status === 401) {
             set_ctx({...ctx, status: "unauthorized"});
         }
         else {

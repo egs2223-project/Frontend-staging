@@ -21,7 +21,7 @@ function RegisterDoctor() {
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        if (ctx.status !== "authenticated") {
+        if (ctx.status !== "unregistered") {
             navigate("/");
         }
     }, [ctx.status, navigate]);

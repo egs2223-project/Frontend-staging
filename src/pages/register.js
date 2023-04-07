@@ -15,7 +15,7 @@ function Register() {
     }
 
     React.useEffect(() => {
-        if (ctx.status !== "authenticated") {
+        if (ctx.status !== "unregistered") {
             navigate("/");
         }
     }, [ctx.status, navigate]);

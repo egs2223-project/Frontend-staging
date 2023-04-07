@@ -29,7 +29,7 @@ function LoadDoctors(state, set_state) {
 }
 
 function LoadDoctorAppointments(state, set_state) {
-    var now = `2022-04-03T23:20:27.890Z`;  //change to current time
+    var now = new Date().toJSON();
 
     if (state.selected_doctor == null) {
         set_state({ ...state, selected_doctor_apps: [] });
